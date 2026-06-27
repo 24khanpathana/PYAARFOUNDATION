@@ -104,10 +104,10 @@ const dailyNeeds = [
 ];
 
 const galleryImages = [
-    'https://images.unsplash.com/photo-1601758123927-196022b7ae1b?auto=format&fit=crop&w=700&q=80',
-    'https://images.unsplash.com/photo-1601758228041-f3b279ce7bec?auto=format&fit=crop&w=700&q=80',
-    'https://images.unsplash.com/photo-1596492784531-6e6eb5ea9993?auto=format&fit=crop&w=700&q=80',
-    'https://images.unsplash.com/photo-1583511655826-05700442b31b?auto=format&fit=crop&w=700&q=80',
+    '/delta.jpeg',
+    '/rose.jpeg',
+    '/veera.jpeg',
+    '/donation schemes.jpeg',
 ];
 
 const Home = () => {

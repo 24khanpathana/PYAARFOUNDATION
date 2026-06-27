@@ -1,8 +1,20 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const Admin = require('../models/Admin');
 const router = express.Router();
+
+const ensureDatabaseReady = (res) => {
+    if (mongoose.connection.readyState === 1) {
+        return true;
+    }
+
+    res.status(503).json({
+        message: 'Database is not connected yet. Please start the backend and try again in a moment.',
+    });
+    return false;
+};
 
 // @route   POST /api/auth/login
 // @desc    Authenticate admin and get token
@@ -12,6 +24,8 @@ router.post('/login', async (req, res) => {
     const { password } = req.body;
 
     try {
+        if (!ensureDatabaseReady(res)) return;
+
         const admin = await Admin.findOne({ adminId });
         if (!admin) {
             return res.status(400).json({ message: 'Invalid credentials' });
@@ -57,6 +71,8 @@ router.post('/forgot-password', async (req, res) => {
     const isProduction = process.env.NODE_ENV === 'production';
 
     try {
+        if (!ensureDatabaseReady(res)) return;
+
         const admin = await Admin.findOne({ adminId: identifier }) || await Admin.findOne({
             adminId: { $regex: `^${escapeRegExp(identifier)}$`, $options: 'i' },
         });
@@ -134,6 +150,8 @@ router.post('/reset-password', async (req, res) => {
     if (!token || !password) {
         return res.status(400).json({ message: 'Reset token and new password are required' });
     }
+
+    if (!ensureDatabaseReady(res)) return;
 
     // Recreate hash from token to find in DB
     const resetPasswordToken = crypto

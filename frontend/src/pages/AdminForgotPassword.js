@@ -21,7 +21,10 @@ const AdminForgotPassword = () => {
             setMessage(res.data.message);
             setResetUrl(res.data.resetUrl || '');
         } catch (err) {
-            setError(err.response?.data?.message || 'Something went wrong. Please try again later.');
+            setError(
+                err.response?.data?.message
+                || (err.request ? 'Backend server is not reachable. Start the backend and try again.' : 'Something went wrong. Please try again later.')
+            );
         } finally {
             setLoading(false);
         }

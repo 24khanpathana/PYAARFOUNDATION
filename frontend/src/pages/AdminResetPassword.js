@@ -41,7 +41,10 @@ const AdminResetPassword = () => {
                 navigate('/admin-login');
             }, 3000);
         } catch (err) {
-            setError(err.response?.data?.message || 'The token is invalid or has expired.');
+            setError(
+                err.response?.data?.message
+                || (err.request ? 'Backend server is not reachable. Start the backend and try again.' : 'The token is invalid or has expired.')
+            );
         } finally {
             setLoading(false);
         }
