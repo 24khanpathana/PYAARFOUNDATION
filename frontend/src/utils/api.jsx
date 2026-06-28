@@ -8,7 +8,7 @@ const getDefaultApiUrl = () => {
     return '';
 };
 
-export const API_BASE_URL = process.env.REACT_APP_API_URL || getDefaultApiUrl();
+export const API_BASE_URL = import.meta.env.VITE_API_URL || getDefaultApiUrl();
 
 const api = axios.create({
     baseURL: API_BASE_URL,

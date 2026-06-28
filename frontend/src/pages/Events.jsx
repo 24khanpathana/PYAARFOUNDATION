@@ -43,7 +43,6 @@ const Events = () => {
                     {/* Images */}
                     <div className="grid grid-cols-2 gap-4">
                         <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=400&q=80" alt="Education" className="rounded-3xl w-full h-72 object-cover shadow-lg" />
-                        <img src="https://images.unsplash.com/photo-1601758228041-f3b279ce7bec?auto=format&fit=crop&w=400&q=80" alt="Compassion" className="rounded-3xl w-full h-72 object-cover shadow-lg mt-12" />
                     </div>
                     
                     {/* Text & Impact */}
