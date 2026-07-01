@@ -14,8 +14,8 @@ const Navbar = ({ theme, setTheme }) => {
         { name: 'About', path: '/about' },
         { name: 'Services', path: '/service' },
         { name: 'Events', path: '/events' },
-        { name: 'Gallery', path: '/gallery' },
         { name: 'Volunteer', path: '/team' },
+        { name: 'Sponsors', path: '/sponsors' },
         { name: 'Contact', path: '/contact' },
     ];
 
