@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { API_BASE_URL } from '../utils/api';
+import { isSafeExternalUrl } from '../utils/externalUrl';
+import { VOLUNTEER_ROLES } from '../utils/volunteerRoles';
 
 const AdminDashboard = () => {
     const { token, logout } = useAuth();
@@ -21,11 +23,13 @@ const AdminDashboard = () => {
     const legacyDonationPageName = ['Donation', 'Schema'].join(' ');
     const donationPageNames = ['Donation Schemes', legacyDonationPageName];
     const isDonationPage = (page) => donationPageNames.includes(page);
-    const emptyContentForm = { title: '', description: '', amount: '', imageUrl: '', date: '', role: '' };
+    const emptyContentForm = { title: '', description: '', amount: '', imageUrl: '', date: '', role: '', detailsLink: '' };
     const [formData, setFormData] = useState(emptyContentForm);
     const [editingId, setEditingId] = useState(null);
     const [customFields, setCustomFields] = useState([]);
     const [addCustomForm, setAddCustomForm] = useState(false);
+    const [customRole, setCustomRole] = useState('');
+    const [contentUrlError, setContentUrlError] = useState('');
 
     const [animalData, setAnimalData] = useState({ name: '', age: '', breed: '', description: '', imageUrl: '' });
     const [editingAnimalId, setEditingAnimalId] = useState(null);
@@ -104,6 +108,8 @@ const AdminDashboard = () => {
         setFormData(emptyContentForm);
         setCustomFields([]);
         setAddCustomForm(false);
+        setCustomRole('');
+        setContentUrlError('');
         setEditingId(null);
     };
 
@@ -115,6 +121,16 @@ const AdminDashboard = () => {
     const handleContentSubmit = async (e) => {
         e.preventDefault();
         const payload = { ...formData, page: selectedPage };
+
+        if (selectedPage === 'Gallery' && !isSafeExternalUrl(formData.detailsLink)) {
+            setContentUrlError('Enter a valid HTTP or HTTPS URL.');
+            return;
+        }
+
+        if (selectedPage === 'Volunteer') {
+            payload.role = formData.role === 'Other' ? customRole.trim() : formData.role;
+            if (!payload.role) return;
+        }
 
         if (!payload.date) {
             delete payload.date;
@@ -155,7 +171,10 @@ const AdminDashboard = () => {
 
     const editContentItem = (item) => {
         setEditingId(item._id);
-        setFormData({ title: item.title || '', description: item.description || '', amount: item.amount || '', imageUrl: item.imageUrl || '', date: item.date ? item.date.split('T')[0] : '', role: item.role || '' });
+        const isPredefinedRole = VOLUNTEER_ROLES.includes(item.role);
+        setFormData({ title: item.title || '', description: item.description || '', amount: item.amount || '', imageUrl: item.imageUrl || '', date: item.date ? item.date.split('T')[0] : '', role: isPredefinedRole ? item.role : item.role ? 'Other' : '', detailsLink: item.detailsLink || '' });
+        setCustomRole(isPredefinedRole ? '' : item.role || '');
+        setContentUrlError('');
         if(item.customForm?.fields?.length) {
             setAddCustomForm(true);
             setCustomFields(item.customForm.fields);
@@ -374,8 +393,10 @@ const AdminDashboard = () => {
                             {['Home', 'About', 'Event', 'Service', 'Contact', 'Donation Schemes'].includes(selectedPage) && (<div><label className="block mb-1 text-sm font-medium">Description</label><input type="text" className="input-field" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} /></div>)}
                             {isDonationPage(selectedPage) && (<div><label className="block mb-1 text-sm font-medium">Amount</label><input type="text" className="input-field" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} placeholder="e.g. Rs. 1000 or One-time" /></div>)}
                             <div><label className="block mb-1 text-sm font-medium">Image URL</label><input type="text" className="input-field" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} /></div>
+                            {selectedPage === 'Gallery' && (<div className="md:col-span-2"><label className="block mb-1 text-sm font-medium">Details / External URL</label><input type="url" className="input-field" value={formData.detailsLink} onChange={e => { setFormData({...formData, detailsLink: e.target.value}); setContentUrlError(''); }} placeholder="https://example.com" aria-describedby="details-link-error" />{contentUrlError && <p id="details-link-error" className="mt-1 text-sm text-red-600">{contentUrlError}</p>}</div>)}
                             {selectedPage === 'Event' && (<div><label className="block mb-1 text-sm font-medium">Event Date</label><input type="date" className="input-field" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} /></div>)}
-                            {selectedPage === 'Volunteer' && (<div><label className="block mb-1 text-sm font-medium">Role</label><input type="text" className="input-field" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} /></div>)}
+                            {selectedPage === 'Volunteer' && (<div><label className="block mb-1 text-sm font-medium">Role</label><select className="input-field" required value={formData.role} onChange={e => { setFormData({...formData, role: e.target.value}); if (e.target.value !== 'Other') setCustomRole(''); }}><option value="">Select a role</option>{VOLUNTEER_ROLES.map(role => <option key={role} value={role}>{role}</option>)}</select></div>)}
+                            {selectedPage === 'Volunteer' && formData.role === 'Other' && (<div><label className="block mb-1 text-sm font-medium">Custom Role</label><input type="text" className="input-field" required value={customRole} onChange={e => setCustomRole(e.target.value)} placeholder="Enter custom role" /></div>)}
                         </div>
                         {selectedPage === 'Service' && (
                             <div className="pt-4 border-t dark:border-gray-700">

@@ -16,6 +16,12 @@ const normalizeContentPayload = (body) => {
         payload.amount = '';
     }
 
+    if (payload.page !== 'Gallery') {
+        payload.detailsLink = '';
+    } else {
+        payload.detailsLink = String(payload.detailsLink || '').trim();
+    }
+
     if (payload.page === 'Service' && payload.customForm?.fields?.length) {
         payload.customForm = {
             title: payload.customForm.title || payload.title,
@@ -49,7 +55,7 @@ router.post('/', protect, async (req, res) => {
         await newContent.save();
         res.status(201).json(newContent);
     } catch (error) {
-        res.status(500).json({ message: error.message || 'Server error' });
+        res.status(error.name === 'ValidationError' ? 400 : 500).json({ message: error.message || 'Server error' });
     }
 });
 
@@ -67,7 +73,7 @@ router.put('/:id', protect, async (req, res) => {
         const updated = await DynamicContent.findByIdAndUpdate(req.params.id, normalizeContentPayload(req.body), { new: true, runValidators: true });
         res.json(updated);
     } catch (error) {
-        res.status(500).json({ message: error.message || 'Server error' });
+        res.status(error.name === 'ValidationError' ? 400 : 500).json({ message: error.message || 'Server error' });
     }
 });
 

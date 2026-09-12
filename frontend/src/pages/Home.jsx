@@ -35,7 +35,7 @@ const programs = [
         icon: FaAmbulance,
         title: 'Emergency Rescue',
         text: 'Rapid response for accident, abuse, abandonment, and critical trauma cases across the city.',
-        image: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=900&q=80',
+        image: '/Emergency Rescue.jpeg',
     },
     {
         icon: FaStethoscope,
@@ -59,7 +59,7 @@ const programs = [
         icon: FaHandHoldingHeart,
         title: 'Adoption Support',
         text: 'Responsible adoption guidance that helps recovered animals find patient, loving, and prepared families.',
-        image: '/rose.jpeg',
+        image: '/Adoption Support.jpeg',
     },
     {
         icon: FaShieldAlt,

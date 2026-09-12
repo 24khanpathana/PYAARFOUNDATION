@@ -56,6 +56,11 @@ const Footer = () => {
             </div>
             <div className="border-t border-black/20 py-6 text-center text-sm text-white/60">
                 &copy; {new Date().getFullYear()} Pyaar Foundation. All rights reserved.
+                <div className="text-white/60">
+                 <li>
+                    <Link to="https://www.linkedin.com/in/amaan-khan-pathan-b847a7381?utm_source=share_via&utm_content=profile&utm_medium=member_android" className="hover:text-white transition"> Designed And Developed By Amaan Khan Pathan</Link>
+                 </li>
+                </div>
             </div>
         </footer>
     );

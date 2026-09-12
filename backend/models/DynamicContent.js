@@ -5,6 +5,17 @@ const CustomFormFieldSchema = new mongoose.Schema({
     type: { type: String, default: 'text' },
 }, { _id: false });
 
+const isHttpUrl = (value) => {
+    if (!value) return true;
+
+    try {
+        const url = new URL(value);
+        return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch {
+        return false;
+    }
+};
+
 const DynamicContentSchema = new mongoose.Schema({
     page: { 
         type: String, 
@@ -15,6 +26,15 @@ const DynamicContentSchema = new mongoose.Schema({
     description: { type: String },
     amount: { type: String, default: '' },
     imageUrl: { type: String, default: '' },
+    detailsLink: {
+        type: String,
+        default: '',
+        trim: true,
+        validate: {
+            validator: isHttpUrl,
+            message: 'Details link must be a valid HTTP or HTTPS URL',
+        },
+    },
     date: { type: Date }, 
     role: { type: String },
     customForm: {

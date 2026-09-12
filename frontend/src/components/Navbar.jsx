@@ -12,6 +12,7 @@ const Navbar = ({ theme, setTheme }) => {
     const links = [
         { name: 'Home', path: '/' },
         { name: 'About', path: '/about' },
+        { name: 'Adoption', path: '/Adoption' },
         { name: 'Services', path: '/service' },
         { name: 'Events', path: '/events' },
         { name: 'Volunteer', path: '/team' },
@@ -28,8 +29,11 @@ const Navbar = ({ theme, setTheme }) => {
                         <p className="truncate text-[0.92rem] font-black uppercase leading-tight tracking-[0.14em] text-primary dark:text-primary sm:text-[1.08rem]">
                             PYAAR FOUNDATION
                         </p>
-                        <p className="mt-1 hidden max-w-[15rem] text-[0.58rem] font-bold uppercase leading-tight tracking-[0.22em] text-slate-700 dark:text-slate-200 sm:block sm:max-w-none sm:text-[0.66rem]">
-                            ANIMAL REHABILITATORS
+                        <p className="mt-1 max-w-[15rem] text-[0.58rem] font-bold uppercase leading-tight tracking-[0.16em] text-slate-700 dark:text-slate-200 sm:max-w-none sm:text-[0.66rem]">
+                            PETANITY AND ANIMAL
+                        </p>
+                        <p className="max-w-[15rem] text-[0.58rem] font-bold uppercase leading-tight tracking-[0.16em] text-slate-700 dark:text-slate-200 sm:max-w-none sm:text-[0.66rem]">
+                            REHABILITATORS FOUNDATION
                         </p>
                     </div>
                 </Link>
@@ -50,7 +54,7 @@ const Navbar = ({ theme, setTheme }) => {
                         Donate Now
                     </Link>
                     <Link to="/admin" className="shrink-0 rounded-full border border-slate-200/80 bg-white px-4 py-3 text-sm font-black text-slate-700 shadow-sm transition hover:border-primary hover:text-primary dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-linen dark:hover:text-linen xl:px-5">
-                        Admin Login
+                        Admin
                     </Link>
                     <button onClick={toggleTheme} className="shrink-0 rounded-full border border-slate-200/80 bg-white px-3 py-3 text-slate-700 transition hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
                         {theme === 'light' ? <FaMoon size={16} /> : <FaSun size={16} />}

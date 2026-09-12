@@ -115,19 +115,33 @@ const AuditRequestForm = () => {
 const DynamicCustomForm = ({ formMeta }) => {
     const [data, setData] = useState({});
     const [msg, setMsg] = useState('');
+    const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setMsg('');
+        setError('');
+        setIsSubmitting(true);
+
         try {
             const res = await api.post('/api/forms/submit', {
                 formId: formMeta._id,
                 formTitle: formMeta.customForm.title,
                 data,
             });
-            setMsg(res.data.message || 'Form submitted successfully.');
+            
+            setMsg(res.data.message || 'Form submitted successfully! Admin has been notified via email.');
             setData({});
+            
+            // Clear success message after 5 seconds
+            setTimeout(() => setMsg(''), 5000);
         } catch (err) {
-            setMsg('Error submitting form. Please try again.');
+            const errorMessage = err.response?.data?.message || 'Error submitting form. Please try again.';
+            setError(errorMessage);
+            console.error('Form submission error:', err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -139,12 +153,35 @@ const DynamicCustomForm = ({ formMeta }) => {
                 {formMeta.customForm.fields.map((f, i) => (
                     <div key={i}>
                         <label className="mb-2 block text-sm font-semibold capitalize text-slate-700">{f.name}</label>
-                        <input type={f.type} className="input-field" required onChange={e => setData({ ...data, [f.name]: e.target.value })} value={data[f.name] || ''} />
+                        <input 
+                            type={f.type} 
+                            className="input-field" 
+                            required 
+                            disabled={isSubmitting}
+                            onChange={e => setData({ ...data, [f.name]: e.target.value })} 
+                            value={data[f.name] || ''} 
+                        />
                     </div>
                 ))}
-                <button type="submit" className="btn-primary w-full py-4">Submit</button>
+                <button 
+                    type="submit" 
+                    className="btn-primary w-full py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={isSubmitting}
+                >
+                    {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
             </form>
-            {msg && <p className="mt-6 rounded-2xl border border-linen/50 bg-linen/25 p-4 text-center font-bold text-clay">{msg}</p>}
+            {msg && (
+                <div className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-4">
+                    <p className="font-bold text-green-700">✓ {msg}</p>
+                    <p className="mt-2 text-sm text-green-600">Check your email for confirmation and further updates.</p>
+                </div>
+            )}
+            {error && (
+                <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-4">
+                    <p className="font-bold text-red-600">❌ {error}</p>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,0 +1,18 @@
+export const VOLUNTEER_ROLES = [
+    'Manager',
+    'Member',
+    'Paravet',
+    'Media Head',
+    'Managing Director',
+    'Dog Section In-charge',
+    'Patron Trustee',
+    'Dairy Development',
+    'Chief Executive Officer',
+    'Digital Media',
+    'Admin Department',
+    'Pharmacist',
+    'Chief Operating Officer',
+    'Rescue Head',
+    'Rescue Manager',
+    'Other',
+];

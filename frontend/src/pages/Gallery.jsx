@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
+import { isSafeExternalUrl } from '../utils/externalUrl';
 
 const Gallery = () => {
     const [content, setContent] = useState([]);
@@ -48,9 +49,21 @@ const Gallery = () => {
                                     </div>
                                 )}
                                 <p className="text-gray-600 leading-relaxed mb-8 flex-grow whitespace-pre-wrap">{item.description}</p>
-                                <button onClick={() => navigate('/donate')} className="w-full bg-honey hover:bg-clay text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-honey/20">
-                                    Support Our Work
-                                </button>
+                                <div className="flex flex-col gap-3">
+                                    {item.detailsLink?.trim() && isSafeExternalUrl(item.detailsLink) && (
+                                        <a
+                                            href={item.detailsLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full rounded-xl border-2 border-honey px-4 py-3 text-center font-bold text-honey transition-colors hover:bg-honey hover:text-white"
+                                        >
+                                            Watch Video
+                                        </a>
+                                    )}
+                                    <button onClick={() => navigate('/donate')} className="w-full bg-honey hover:bg-clay text-white font-bold py-4 rounded-xl transition-colors shadow-lg shadow-honey/20">
+                                        Support Our Work
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
