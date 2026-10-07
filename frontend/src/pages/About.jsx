@@ -122,6 +122,25 @@ const About = () => {
                 </div>
             </section>
 
+            <section className="bg-white px-6 py-20 lg:px-12">
+                <div className="mx-auto max-w-7xl">
+                    <div className="max-w-4xl">
+                        <p className="text-sm font-bold uppercase tracking-[0.28em] text-primary">Our animal welfare policy</p>
+                        <h2 className="mt-4 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">About Pyaar Foundation Policy</h2>
+                        <div className="mt-7 space-y-5 text-lg leading-8 text-slate-600">
+                            <p>Pyaar Foundation is an animal welfare organisation based in Chandrapur, Maharashtra, dedicated to protecting animals, preventing cruelty, and providing care to those in need.</p>
+                            <p>The foundation actively works to rescue cows and other animals from illegal slaughter, neglect, abandonment, and distress. It operates animal shelters that provide food, medical treatment, rehabilitation, and a safe environment for rescued animals.</p>
+                            <p>Pyaar Foundation also undertakes animal rescue operations, veterinary support, and community welfare initiatives. Through collaborations with local authorities and dedicated teams, the organisation strives to improve animal welfare and promote compassion and responsible care for animals.</p>
+                            <p>With a commitment to saving lives and preventing animal cruelty, Pyaar Foundation continues to work towards a society where every animal is treated with dignity, kindness, and respect.</p>
+                        </div>
+                        <p className="mt-8 border-l-4 border-primary bg-mist p-6 text-lg font-semibold leading-8 text-slate-900">
+                            <span className="mb-1 block text-sm font-bold uppercase tracking-widest text-primary">Our Mission</span>
+                            To protect animals, prevent cruelty, save lives, and ensure that every animal receives the care, shelter, and compassion it deserves.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <DynamicContentRenderer
                 page="About"
                 title="More About Our Mission"

@@ -2,6 +2,70 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 
+const adoptionPolicySections = [
+    {
+        title: 'Eligibility for Adoption',
+        points: [
+            'The adopter must be at least 18 years of age.',
+            'Valid identity and address proof must be provided.',
+            'The adopter must have the consent of all family members, where applicable.',
+            'The adopter must have suitable living conditions and the ability to provide proper care.',
+        ],
+    },
+    {
+        title: 'Adoption Application',
+        points: [
+            'Every prospective adopter must complete the adoption application form.',
+            'Pyaar Foundation may verify the information provided and assess the suitability of the proposed home.',
+            'The foundation reserves the right to approve or reject an application based on animal welfare considerations.',
+        ],
+    },
+    {
+        title: 'Health and Medical Care',
+        points: [
+            'Available medical and vaccination records will be shared with the adopter.',
+            'The adopter must ensure timely vaccinations, deworming, sterilisation where appropriate, and routine veterinary check-ups.',
+            'Any known medical conditions or special care requirements will be communicated to the adopter.',
+        ],
+    },
+    {
+        title: 'Responsibilities of the Adopter',
+        points: [
+            'Provide adequate food, clean water, shelter, exercise, and veterinary care.',
+            'Treat the animal with kindness and never subject it to cruelty, neglect, or abandonment.',
+            'Comply with applicable animal welfare laws and local regulations.',
+            'Ensure the animal is not used for illegal activities, commercial exploitation, or unauthorised breeding.',
+            'Keep identification and registration details updated wherever required.',
+        ],
+    },
+    {
+        title: 'Non-Transfer and Abandonment',
+        points: [
+            'The adopted animal must not be sold, gifted, transferred, or abandoned without prior communication with Pyaar Foundation.',
+            'If the adopter can no longer care for the animal, the foundation must be informed so that a suitable alternative arrangement can be discussed.',
+        ],
+    },
+    {
+        title: 'Follow-up and Monitoring',
+        points: [
+            "Pyaar Foundation may conduct follow-up calls, request photographs or updates, and arrange reasonable post-adoption visits with the adopter's consent.",
+            "The adopter is expected to cooperate with follow-ups to help ensure the animal's well-being.",
+        ],
+    },
+    {
+        title: 'Violation of Adoption Conditions',
+        points: [
+            'If there is credible evidence of cruelty, neglect, abandonment, or a serious breach of the adoption agreement, Pyaar Foundation may take appropriate steps to protect the animal, including seeking its return through lawful means and contacting the relevant authorities where necessary.',
+        ],
+    },
+    {
+        title: 'Declaration and Consent',
+        points: [
+            'By signing the adoption form, the adopter confirms that the information provided is accurate and agrees to comply with this policy.',
+        ],
+    },
+];
+
 const Adoption = () => {
     const [animals, setAnimals] = useState([]);
     const navigate = useNavigate();
@@ -87,6 +151,49 @@ const Adoption = () => {
                         <p className="text-gray-500 text-lg font-medium">No animals are currently listed for adoption online. Please contact us directly or check back soon!</p>
                     </div>
                 )}
+            </section>
+
+            <section className="bg-white mt-24 py-20 px-6 border-y border-sand/40">
+                <div className="max-w-5xl mx-auto">
+                    <div className="mb-12">
+                        <p className="text-sm font-bold uppercase tracking-widest text-clay">Pyaar Foundation · Chandrapur, Maharashtra</p>
+                        <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mt-3">Animal Adoption Policy</h2>
+                        <p className="text-gray-600 text-lg leading-relaxed mt-5 max-w-3xl">
+                            Pyaar Foundation is committed to ensuring that every animal adopted from our care receives a safe, healthy, and loving home. Our adoption process prioritises animal welfare, responsible ownership, and the long-term well-being of every animal.
+                        </p>
+                    </div>
+
+                    <div className="divide-y divide-gray-200 border-y border-gray-200">
+                        {adoptionPolicySections.map((section, index) => (
+                            <article key={section.title} className="grid gap-3 py-6 md:grid-cols-[3rem_1fr] md:gap-6">
+                                <span className="text-sm font-bold text-clay">{String(index + 1).padStart(2, '0')}</span>
+                                <div>
+                                    <h3 className="text-xl font-bold text-gray-900">{section.title}</h3>
+                                    <ul className="mt-3 list-disc space-y-2 pl-5 text-gray-600 leading-relaxed">
+                                        {section.points.map(point => <li key={point}>{point}</li>)}
+                                    </ul>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+
+                    <div className="mt-10 border border-sand/60 bg-[#FAFAFA] p-6 md:p-8">
+                        <p className="font-bold text-gray-900">For Pyaar Foundation</p>
+                        <p className="text-gray-600">Chandrapur, Maharashtra</p>
+                        <div className="mt-8 grid gap-x-10 gap-y-7 sm:grid-cols-2">
+                            {[
+                                "Adopter's Name",
+                                'Signature',
+                                'Date',
+                                "Animal's Name/Identification",
+                            ].map(label => (
+                                <div key={label} className="border-b border-gray-400 pb-2">
+                                    <span className="text-sm text-gray-600">{label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <section className="bg-sand/20 mt-24 py-24 px-6 border-t border-sand/40">

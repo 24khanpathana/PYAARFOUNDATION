@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaBuilding, FaGlobeAmericas, FaShieldAlt, FaShareAlt, FaUniversity } from 'react-icons/fa';
+import api from '../utils/api';
 
 const ORGANIZATION_NAME = 'PETANITY AND ANIMAL REHABILITATORS FOUNDATION';
 const UPI_ID = 'petanityandanimalreh.97108903@hdfcbank';
@@ -29,6 +30,11 @@ const internationalDetails = [
 ];
 
 const Donation = () => {
+    const [amount, setAmount] = useState('');
+    const [donorName, setDonorName] = useState('');
+    const [paymentError, setPaymentError] = useState('');
+    const [isPaying, setIsPaying] = useState(false);
+
     useEffect(() => {
         document.title = 'Bank Transfer Details | Pyaar Foundation';
     }, []);
@@ -36,6 +42,20 @@ const Donation = () => {
     const handleWhatsAppShare = () => {
         const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
         window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    };
+
+    const handlePayment = async (event) => {
+        event.preventDefault();
+        setPaymentError('');
+        setIsPaying(true);
+
+        try {
+            const { data } = await api.post('/api/payments/initiate', { amount, name: donorName });
+            window.location.assign(data.redirectUrl);
+        } catch (error) {
+            setPaymentError(error.response?.data?.message || 'Unable to start payment. Please try again.');
+            setIsPaying(false);
+        }
     };
 
     return (
@@ -90,6 +110,25 @@ const Donation = () => {
                         </dl>
                         <p className="mt-6 text-sm leading-6 text-slate-500">International donors can use PayPal or SWIFT transfer for contributions.</p>
                     </article>
+                </section>
+
+                <section className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 text-center shadow-[0_18px_60px_rgba(15,23,42,0.08)] sm:px-10">
+                    <h2 className="text-2xl font-black tracking-tight text-slate-900 sm:text-4xl">Donate Online</h2>
+                    <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-500 sm:text-base">Enter your details to continue securely to the payment gateway.</p>
+                    <form onSubmit={handlePayment} className="mx-auto mt-8 grid max-w-2xl gap-4 text-left sm:grid-cols-[1fr_1.4fr_auto] sm:items-end">
+                        <label className="text-sm font-semibold text-slate-700">
+                            Amount (INR)
+                            <input type="number" min="1" step="0.01" required value={amount} onChange={(event) => setAmount(event.target.value)} placeholder="500" className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                        </label>
+                        <label className="text-sm font-semibold text-slate-700">
+                            Your name
+                            <input type="text" minLength="2" maxLength="100" required value={donorName} onChange={(event) => setDonorName(event.target.value)} placeholder="Enter your name" className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-normal outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20" />
+                        </label>
+                        <button type="submit" disabled={isPaying} className="inline-flex min-h-[50px] items-center justify-center rounded-xl bg-primary px-7 py-3 font-bold text-white transition hover:brightness-95 disabled:cursor-wait disabled:opacity-60">
+                            {isPaying ? 'Opening...' : 'Pay'}
+                        </button>
+                    </form>
+                    {paymentError && <p className="mt-4 text-sm font-semibold text-red-600" role="alert">{paymentError}</p>}
                 </section>
 
                 <section className="rounded-[2rem] border border-slate-200 bg-white px-6 py-10 text-center shadow-[0_18px_60px_rgba(15,23,42,0.08)] sm:px-10">
